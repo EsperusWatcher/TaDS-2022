@@ -34,10 +34,13 @@ typedef struct list
 } list_t;
 
 // sparse vector structure
+// vector-column
 typedef struct s_vector
 {
-    int A;
-    int JA;
+    int *A; // Non-zero values
+    int *JA; // For storing row indexes
+    int row; // Overall amount of rows in vector
+    int nza; // Amount of non-zero elements
 } vector_t;
 
 typedef struct s_matrix

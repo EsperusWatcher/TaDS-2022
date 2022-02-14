@@ -37,6 +37,7 @@ void matrix_tests()
 
     create_s_matrix(&test_s_matrix1);
     print_s_matrix(test_s_matrix1);
+    print_s_matrix_normal_view(test_s_matrix1);
 
     printf("Freeing sparse matrix \n");
     free_s_matrix(&test_s_matrix1);

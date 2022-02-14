@@ -67,7 +67,8 @@ int check_in(int *list, int list_size, int element)
 extern int value_by_index(list_t *list, int index);
 void print_s_matrix_normal_view(matrix_t *matrix)
 {
-
+    printf("\nSPARSE MATRIX IN STANDART VIEW\n\n");
+ 
     if (matrix->row > MAX_SPARSE_PRINT_ROW || matrix->col > MAX_SPARSE_PRINT_COL)
     {
         printf("The sparse matrix is too big to be printed in standart view\n");
@@ -121,6 +122,9 @@ void print_s_matrix_normal_view(matrix_t *matrix)
         
         printf("\n");
     }
+
+    printf("\n");
+    printf("----------------------------------------\n");
 }
 
 // Printning out sparse matrix
