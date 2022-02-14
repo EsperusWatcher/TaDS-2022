@@ -13,15 +13,15 @@ void auto_fill_matrix(std_matrix_t *matrix, int percent);
 int allocate_s_matrix(matrix_t **matrix, int row, int col, int nza);
 int create_s_matrix(matrix_t **matrix);
 int fill_s_matrix(matrix_t **matrix);
-int auto_fill_s_matrix(matrix_t **matrix, int density);
+int auto_fill_s_matrix(matrix_t **matrix);
 
 int allocate_random_s_matrix(matrix_t *matrix, int A_size, int JA_size);
 int free_s_matrix(matrix_t **matrix);
 
 int allocate_sparse_vector(vector_t **vector, int nza);
 int free_s_vector(vector_t **vector);
-int fill_s_vector(vector_t *vector);
+int fill_s_vector(vector_t **vector);
 int create_s_vector(vector_t **vector);
-void auto_fill_s_vector(vector_t *vector);
+void auto_fill_s_vector(vector_t **vector);
 
 #endif

@@ -195,20 +195,6 @@ int create_s_matrix(matrix_t **matrix)
         return ERROR_INPUT;
     }
 
-    printf("Input amount of ELEMENTS: ");
-    if (scanf("%d", &elements) == FALSE)
-    {
-        printf("ERROR: wrong matrix input\n");
-        return ERROR_INPUT;
-    }
-
-    if (allocate_s_matrix(matrix, row, col, elements) != ERROR_NONE)
-        return ERROR_MEMORY;
-
-    (*matrix)->row = row;
-    (*matrix)->col = col;
-    (*matrix)->nza = elements;
-
     printf("Would you like to fill matrix by hand (y) or auto (N)?\n");
     char choice;
 
@@ -221,13 +207,44 @@ int create_s_matrix(matrix_t **matrix)
     switch (choice)
     {
         case 'y':
+            printf("Input amount of ELEMENTS: ");
+            if (scanf("%d", &elements) == FALSE)
+            {
+                printf("ERROR: wrong matrix input\n");
+                return ERROR_INPUT;
+            }
+
+            if (allocate_s_matrix(matrix, row, col, elements) != ERROR_NONE)
+                return ERROR_MEMORY;
+
+            (*matrix)->row = row;
+            (*matrix)->col = col;
+            (*matrix)->nza = elements;
             // Fill sparse matrix by hand
             fill_s_matrix(matrix);
             break;
         default:
             // Fill sparse matrix randomly
-            //TODO PUT RANDOMIZE FUNCTION HERE
-            printf("IT IS NOT READY >:(\n");
+            printf("Input matrix density(1-100): ");
+            int density;
+
+            if (scanf(" %d", &density) == FALSE)
+            {
+                printf("ERROR: wrong matrix input\n");
+                return ERROR_INPUT;
+            }
+
+            // Estimation of how many non-zero elements there will be based on density
+            int nza = row * col * density / 100;
+
+            if (allocate_s_matrix(matrix, row, col, nza) != ERROR_NONE)
+                return ERROR_MEMORY;
+
+            (*matrix)->row = row;
+            (*matrix)->col = col;
+            (*matrix)->nza = nza;
+
+            auto_fill_s_matrix(matrix);
             break;
     }
     
@@ -355,25 +372,20 @@ int allocate_s_matrix(matrix_t **matrix, int row, int col, int nza)
 
 // Creating randomized sparse matrix
 // Fills matrix with random elements
-int auto_fill_s_matrix(matrix_t **matrix, int density)
+// The algorithm is the same as in fill_s_matrix
+// Just randomized
+int auto_fill_s_matrix(matrix_t **matrix)
 {
-     // When filling sparse matri we have to input all row values
-    // in non-descending order. This is the easiest way to fill IA list
     int last_row_index = 0;
     int row_difference = 0;
-    
-    int filled_elements = 0;
-    int total_slots = (*matrix)->row * (*matrix)->col;
 
-    // Rough estimation of how many non-zero elements are going to be in the matrix
-    int estimated_elements = total_slots * density / 100;
-    
-    // Rough estimation on how many rows/columns are needed
-    // These estimations are calculated with an idea of
-    // Placing certain amount of elements (according to density)
-    // Equally across the whole matrix
-    int estimated_rows;
-    int estimated_columns;
+    // We have amount of non-zero elements
+    // We still have to fill the matrix in ascending rows order
+    // Because we care about the order of elements in A and JA
+
+    // So we will have to estimate and offset some values to try
+    // And get semi-equal filling of matrix
+    int offset = (*matrix)->row * (*matrix)->col / (*matrix)->nza;
 
     int current_row_sum = 0;
     
@@ -386,28 +398,22 @@ int auto_fill_s_matrix(matrix_t **matrix, int density)
     if (add_node(&(*matrix)->IA, 0) != ERROR_NONE)
         return ERROR_MEMORY;
 
-    for (int i = 0; i < (*matrix)->nza; i++)
+    for (int i = 0; i < (*matrix)->nza; i++, offset--)
     {
-        // Enter row and column of the element
-
-        col_ind = rand() % (*matrix)->col - 1;
-        row_ind = rand() % (*matrix)->row - 1;
-
+        col_ind = rand() % (*matrix)->col;
         (*matrix)->JA[i] = col_ind;
 
-        // row index must not be lower than its previous value
+        row_ind = rand() % ((*matrix)->row - offset);
+
         while (row_ind < last_row_index)
-            row_ind = rand() % (*matrix)->row - 1;
+            row_ind = rand() % ((*matrix)->row - offset);
 
         if (row_ind > last_row_index)
         {
             row_difference = row_ind - last_row_index;
-
-            // Means one or more rows in matrix dont have any non-zero elements
-            // So we have to adjust IA list accordingly
+            
             if (row_difference > 0)
             {
-                //? supposedly this adds previous value?
                 for (int k = 0; k < row_difference; k++)
                 {
                     if (add_node(&(*matrix)->IA, current_row_sum) != ERROR_NONE)
@@ -521,15 +527,15 @@ int free_s_vector(vector_t **vector)
     free((*vector));
 }
 
-int fill_s_vector(vector_t *vector)
+int fill_s_vector(vector_t **vector)
 {
     int value;
     int row;
-    for (int i = 0; i < vector->nza; i++)
+    for (int i = 0; i < (*vector)->nza; i++)
     {
         printf("Input element position(row) in vector: ");
 
-        if (scanf(" %d", &row) == FALSE || row > vector->row)
+        if (scanf(" %d", &row) == FALSE || row > (*vector)->row)
         {
             printf("ERROR: vector input error\n");
             return ERROR_INPUT;
@@ -543,8 +549,8 @@ int fill_s_vector(vector_t *vector)
         }
         else
         {
-            vector->A[i] = value;
-            vector->JA[i] = row;
+            (*vector)->A[i] = value;
+            (*vector)->JA[i] = row;
         }
     }
 
@@ -617,7 +623,7 @@ int create_s_vector(vector_t **vector)
     return ERROR_NONE;
 }
 
-void auto_fill_s_vector(vector_t *vector)
+void auto_fill_s_vector(vector_t **vector)
 {
     //estimation of non-zero elements amount
     int fill_JA;
@@ -626,12 +632,12 @@ void auto_fill_s_vector(vector_t *vector)
     // Elements won't be organized but we dont need them to be
     // Since this is a vector used in multiplication
     // We only care for values, not their order
-    for (int i = 0; i < vector->nza; i++)
+    for (int i = 0; i < (*vector)->nza; i++)
     {
-        fill_JA = rand() % vector->row;
+        fill_JA = rand() % (*vector)->row;
         fill_A = rand() % 10;
 
-        vector->A[i] = fill_A;
-        vector->JA[i] = fill_JA;
+        (*vector)->A[i] = fill_A;
+        (*vector)->JA[i] = fill_JA;
     }
 }
