@@ -333,6 +333,8 @@ int create_s_matrix(matrix_t **matrix)
             if (std_to_sparse(tmp_matrix, matrix) != ERROR_NONE)
                 return ERROR_MEMORY;
 
+            free_std_matrix(&tmp_matrix);
+
             (*matrix)->row = row;
             (*matrix)->col = col;
             (*matrix)->nza = nza;
@@ -509,7 +511,7 @@ int allocate_sparse_vector(vector_t **vector, int nza)
     
     (*vector)->nza = nza;
 
-    (*vector)->A = (int *)malloc(sizeof(int) * (*vector)->nza);
+    (*vector)->A = (int *)calloc(sizeof(int), (*vector)->nza);
     
     if ((*vector)->A == NULL)
     {
@@ -517,7 +519,7 @@ int allocate_sparse_vector(vector_t **vector, int nza)
         return ERROR_MEMORY;
     }
 
-    (*vector)->JA = (int *)malloc(sizeof(int) * (*vector)->nza);
+    (*vector)->JA = (int *)calloc(sizeof(int), (*vector)->nza);
 
     if ((*vector)->JA == NULL)
     {
@@ -604,6 +606,8 @@ int create_s_vector(vector_t **vector)
             if (allocate_sparse_vector(vector, nza) != ERROR_NONE)
                 return ERROR_MEMORY;
 
+            (*vector)->row = rows;
+
             if (fill_s_vector(vector) != ERROR_NONE)
                 return ERROR_INPUT;
             break;
@@ -633,6 +637,21 @@ int create_s_vector(vector_t **vector)
     return ERROR_NONE;
 }
 
+void auto_create_s_vector(vector_t **vector, int size)
+{
+    int rows = size;
+
+    printf("auto vector size: %d\n", rows);
+
+    int nza = size;
+
+    allocate_sparse_vector(vector, nza);
+
+    (*vector)->row = size;
+
+    print_s_vector(*vector);
+}
+
 void auto_fill_s_vector(vector_t **vector)
 {
     //estimation of non-zero elements amount
@@ -647,7 +666,7 @@ void auto_fill_s_vector(vector_t **vector)
         fill_JA = rand() % (*vector)->row;
         fill_A = rand() % 10;
 
-        (*vector)->A[i] = fill_A;
+        (*vector)->A[fill_JA] = fill_A;
         (*vector)->JA[i] = fill_JA;
     }
 }

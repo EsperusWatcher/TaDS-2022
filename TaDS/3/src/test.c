@@ -39,6 +39,28 @@ void matrix_tests()
     print_s_matrix(test_s_matrix1);
     print_s_matrix_normal_view(test_s_matrix1);
 
+    printf("Testing sparse vector creation...\n");
+    vector_t *test_s_vector;
+    vector_t *test_s_vector_result;
+
+    create_s_vector(&test_s_vector);
+    print_s_vector_std_view(test_s_vector);
+
+    printf("Testing auto-creating vector...\n");
+    auto_create_s_vector(&test_s_vector_result, test_s_matrix1->col);
+    //print_s_vector_std_view(test_s_vector_result);
+
+    printf("Testing sparse matrix x vector multiplication...\n");
+    matrix_multiplication_s(test_s_matrix1, test_s_vector, &test_s_vector_result);
+
+    printf("Result:\n");
+    print_s_vector(test_s_vector_result);
+    //print_s_vector_std_view(test_s_vector_result);
+
+    printf("Freeing sparse vectors \n");
+    free_s_vector(&test_s_vector);
+    free_s_vector(&test_s_vector_result);
+
     printf("Freeing sparse matrix \n");
     free_s_matrix(&test_s_matrix1);
     printf("DONE\n");

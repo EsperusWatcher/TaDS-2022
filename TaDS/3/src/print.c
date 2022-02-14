@@ -152,3 +152,25 @@ void print_s_vector(vector_t *vector)
     print_arr(vector->JA, vector->nza);
     printf("-------------------------\n");
 }
+
+void print_s_vector_std_view(vector_t *vector)
+{
+    printf("----------------------\n");
+    printf("SPARSE VECTOR IN STD VIEW\n");
+
+    int prev_JA = 0;
+    for (int i = 0; i < vector->nza; i++)
+    {
+        if (vector->JA[i] - vector->JA[prev_JA] > 0)
+        {
+            int diff = vector->JA[i] - vector->JA[prev_JA];
+            for (int k = 0; k < diff - 1; k++)
+            {
+                printf("0\n");
+            }
+        }
+
+        printf("%d\n", vector->A[i]);        
+    }
+    printf("----------------------\n");
+}

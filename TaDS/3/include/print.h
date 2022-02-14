@@ -10,5 +10,7 @@ void print_list_IA(list_t *list);
 int check_in(int *list, int list_size, int element);
 void print_s_matrix_normal_view(matrix_t *matrix);
 void print_s_matrix(matrix_t *matrix);
+void print_s_vector(vector_t *vector);
+void print_s_vector_std_view(vector_t *vector);
 
 #endif
