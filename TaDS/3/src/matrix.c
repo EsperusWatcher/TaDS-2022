@@ -482,3 +482,156 @@ void reset_std_matrix(std_matrix_t *matrix)
         for(int j = 0; j < matrix->col; j++)
             matrix->matrix[i][j] = 0;
 }
+
+int allocate_sparse_vector(vector_t **vector, int nza)
+{
+    *vector = (vector_t *)malloc(sizeof(vector_t));
+    
+    if (*vector == NULL)
+    {
+        printf("ERROR: vector memory allocation\n");
+        return ERROR_MEMORY;
+    }
+    
+    (*vector)->nza = nza;
+
+    (*vector)->A = (int *)malloc(sizeof(int) * (*vector)->nza);
+    
+    if ((*vector)->A == NULL)
+    {
+        printf("ERROR: vector memory allocation\n");
+        return ERROR_MEMORY;
+    }
+
+    (*vector)->JA = (int *)malloc(sizeof(int) * (*vector)->nza);
+
+    if ((*vector)->JA == NULL)
+    {
+        printf("ERROR: vector memory allocation\n");
+        return ERROR_MEMORY;
+    }
+
+    return ERROR_NONE;
+}
+
+int free_s_vector(vector_t **vector)
+{
+    free((*vector)->A);
+    free((*vector)->JA);
+    free((*vector));
+}
+
+int fill_s_vector(vector_t *vector)
+{
+    int value;
+    int row;
+    for (int i = 0; i < vector->nza; i++)
+    {
+        printf("Input element position(row) in vector: ");
+
+        if (scanf(" %d", &row) == FALSE || row > vector->row)
+        {
+            printf("ERROR: vector input error\n");
+            return ERROR_INPUT;
+        }
+
+        printf("sparse vector[%d] = ", row);
+        if (scanf(" %d", &value) == FALSE)
+        {
+            printf("ERROR: vector input error\n");
+            return ERROR_INPUT;
+        }
+        else
+        {
+            vector->A[i] = value;
+            vector->JA[i] = row;
+        }
+    }
+
+    return ERROR_NONE;
+}
+
+extern print_s_vector(vector_t *vector);
+
+// Used to unite everything related to sparse vector creation
+int create_s_vector(vector_t **vector)
+{
+    printf ("Input size(rows) of column-vector: ");
+    int rows;
+
+    if (scanf(" %d", &rows) == FALSE)
+    {
+        printf("ERROR: vector creation input error\n");
+        return ERROR_INPUT;
+    }
+
+    printf("Would you like to input vector by hand(y) or randomize(N): ");
+    char choice;
+
+    if (scanf(" %c", &choice) == FALSE)
+    {
+        printf("ERROR: vector creation input error\n");
+        return ERROR_INPUT;
+    }
+
+    switch(choice)
+    {
+        case 'y':
+            printf("Input amount of non-zero elements in vector: ");
+            int nza;
+
+            if (scanf(" %d", &nza) == FALSE || nza > rows)
+            {
+                printf("ERROR: vector creation input error\n");
+                return ERROR_INPUT;
+            }
+
+            if (allocate_sparse_vector(vector, nza) != ERROR_NONE)
+                return ERROR_MEMORY;
+
+            if (fill_s_vector(*vector) != ERROR_NONE)
+                return ERROR_INPUT;
+            break;
+
+        default:
+            printf("Input fill density(1-100): ");
+            int density;
+
+            if (scanf(" %d", &density) == FALSE || density < 1 || density > 100)
+            {
+                printf("ERROR: vector creation input error\n");
+                return ERROR_INPUT;
+            }
+
+            // Estimation of non-zero elements amount
+            int nza = rows * density / 100;
+
+            if (allocate_sparse_vector(vector, nza) != ERROR_NONE)
+                return ERROR_MEMORY;
+
+            randomize_vector(*vector);
+            break;
+    }
+
+    print_s_vector(vector);
+    return ERROR_NONE;
+}
+
+void auto_fill_s_vector(vector_t *vector)
+{
+    //estimation of non-zero elements amount
+    int fill_JA;
+    int fill_A;
+
+    // Elements won't be organized but we dont need them to be
+    // Since this is a vector used in multiplication
+    // We only care for values, not their order
+    for (int i = 0; i < vector->nza; i++)
+    {
+        fill_JA = rand() % vector->row;
+        fill_A = rand() % 10;
+
+        vector->A[i] = fill_A;
+        vector->JA[i] = fill_JA;
+    }
+}

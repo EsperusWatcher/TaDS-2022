@@ -140,3 +140,15 @@ void print_s_matrix(matrix_t *matrix)
     printf("-------------------------\n");
     
 }
+
+void print_s_vector(vector_t *vector)
+{
+    printf("----------------------\n");
+    printf("SPARSE VECTOR\n");
+
+    printf("A: ");
+    print_arr(vector->A, vector->nza);
+    printf("JA: ");
+    print_arr(vector->JA, vector->nza);
+    printf("-------------------------\n");
+}
