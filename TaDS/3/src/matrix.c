@@ -1,5 +1,7 @@
 #include "../include/matrix.h"
 
+extern int add_node(list_t *list, int value);
+
 // Memory allocation for standart matrix
 int allocate_std_matrix(std_matrix_t **std_matrix, int row, int col)
 {
@@ -173,6 +175,84 @@ void auto_fill_matrix(std_matrix_t *matrix, int density)
         }
 }
 
+// ounts non-zero elements in standart matrix
+int count_nza(std_matrix_t *matrix)
+{
+    int counter = 0;
+    for (int i = 0; i < matrix->row; i++)
+    {
+        for (int k = 0; k < matrix->col; k++)
+            if (matrix->matrix[i][k] != 0)
+                counter++;
+    }
+
+    return counter;
+}
+
+int std_to_sparse(std_matrix_t *matrix, matrix_t **s_matrix)
+{
+    (*s_matrix)->IA.root->start_row_ind = 0;
+
+    // First element of the list is 0
+    if (add_node(&(*s_matrix)->IA, 0) != ERROR_NONE)
+        return ERROR_MEMORY;
+
+    // For IA list
+    int row_nza_counter = 0;
+    int last_IA_value_counter;
+    int total_nza_counter = 0;
+    int zero_row_counter = 0;
+    int nza_stored_counter = 0;
+
+    for (int i = 0; i < matrix->row; i++)
+    {
+        for (int k = 0; k < matrix->col; k++)
+        {
+            if (matrix->matrix[i][k] > 0)
+            {
+                row_nza_counter++;
+                total_nza_counter++;
+            }
+        }
+
+        if (row_nza_counter == 0)
+        {
+            zero_row_counter++;
+        }
+        else
+        {
+            for (int k = 0; k < matrix->col; k++)
+            {
+                if (matrix->matrix[i][k] > 0)
+                {
+                    (*s_matrix)->A[nza_stored_counter] = matrix->matrix[i][k];
+                    (*s_matrix)->JA[nza_stored_counter] = k;
+                    nza_stored_counter++;
+                }
+            }
+
+            for (int k = 0; k < zero_row_counter; k++)
+            {
+                add_node(&(*s_matrix)->IA, last_IA_value_counter);
+            }
+
+            add_node(&(*s_matrix)->IA, total_nza_counter);
+            last_IA_value_counter = total_nza_counter;
+            zero_row_counter = 0;
+        }
+
+        row_nza_counter = 0;
+    }
+
+    for (int k = 0; k < zero_row_counter; k++)
+    {
+        if (add_node(&(*s_matrix)->IA, last_IA_value_counter) != ERROR_NONE)
+            return ERROR_MEMORY;
+    }
+
+    return ERROR_NONE;
+}
+
 // Everything in creating and filling sparse matrix
 // Either by user or randomization
 int create_s_matrix(matrix_t **matrix)
@@ -204,6 +284,8 @@ int create_s_matrix(matrix_t **matrix)
         return ERROR_INPUT;
     }
 
+    int nza;
+
     switch (choice)
     {
         case 'y':
@@ -234,24 +316,33 @@ int create_s_matrix(matrix_t **matrix)
                 return ERROR_INPUT;
             }
 
-            // Estimation of how many non-zero elements there will be based on density
-            int nza = row * col * density / 100;
+            // We will generate random standart matrix and then convert it
+            // to sparse matrix because it is soooooo much easier ._.
+            std_matrix_t *tmp_matrix;
+
+            if (allocate_std_matrix(&tmp_matrix, row, col) != ERROR_NONE)
+                return ERROR_MEMORY;
+
+            auto_fill_matrix(tmp_matrix, density);
+
+            nza = count_nza(tmp_matrix);
 
             if (allocate_s_matrix(matrix, row, col, nza) != ERROR_NONE)
+                return ERROR_MEMORY;
+
+            if (std_to_sparse(tmp_matrix, matrix) != ERROR_NONE)
                 return ERROR_MEMORY;
 
             (*matrix)->row = row;
             (*matrix)->col = col;
             (*matrix)->nza = nza;
 
-            auto_fill_s_matrix(matrix);
             break;
     }
     
     return ERROR_NONE;
 }
 
-extern int add_node(list_t *list, int value);
 
 // Filling matrix by hand
 int fill_s_matrix(matrix_t **matrix)
@@ -374,92 +465,9 @@ int allocate_s_matrix(matrix_t **matrix, int row, int col, int nza)
 // Fills matrix with random elements
 // The algorithm is the same as in fill_s_matrix
 // Just randomized
-int auto_fill_s_matrix(matrix_t **matrix)
-{
-    int last_row_index = 0;
-    int row_difference = 0;
-
-    // We have amount of non-zero elements
-    // We still have to fill the matrix in ascending rows order
-    // Because we care about the order of elements in A and JA
-
-    // So we will have to estimate and offset some values to try
-    // And get semi-equal filling of matrix
-    int offset = (*matrix)->row * (*matrix)->col / (*matrix)->nza;
-
-    int current_row_sum = 0;
-    
-    int row_ind = -1;
-    int col_ind = -1;
-
-    (*matrix)->IA.root->start_row_ind = 0;
-
-    // First element of the list is 0
-    if (add_node(&(*matrix)->IA, 0) != ERROR_NONE)
-        return ERROR_MEMORY;
-
-    for (int i = 0; i < (*matrix)->nza; i++, offset--)
-    {
-        col_ind = rand() % (*matrix)->col;
-        (*matrix)->JA[i] = col_ind;
-
-        row_ind = rand() % ((*matrix)->row - offset);
-
-        while (row_ind < last_row_index)
-            row_ind = rand() % ((*matrix)->row - offset);
-
-        if (row_ind > last_row_index)
-        {
-            row_difference = row_ind - last_row_index;
-            
-            if (row_difference > 0)
-            {
-                for (int k = 0; k < row_difference; k++)
-                {
-                    if (add_node(&(*matrix)->IA, current_row_sum) != ERROR_NONE)
-                        return ERROR_MEMORY;
-                }
-            }
-
-            last_row_index = row_ind;
-            current_row_sum++;
-        }
-        else
-            current_row_sum++; // Counting up if we are still on the current row
-
-        (*matrix)->A[i] = rand() % 10;
-    }
-
-    // Adding empty rows after last row with a non-zero element
-    for (int i = last_row_index; i < (*matrix)->row; i++)
-        if (add_node(&(*matrix)->IA, current_row_sum) != ERROR_NONE)
-            return ERROR_MEMORY;
-    
-    return ERROR_NONE;
-}
 
 // Function is used to pre-allocate memory for a randomized sparse matrix
 // Called before filling matrix with values
-int allocate_random_s_matrix(matrix_t *matrix, int A_size, int JA_size)
-{
-    matrix->A = (int *)calloc(sizeof(int), A_size);
-
-    if (matrix->A == NULL)
-    {
-        printf("ERROR: random sparse matrix memory allocation\n");
-        return ERROR_MEMORY;
-    }
-
-    matrix->JA = (int *)calloc(sizeof(int), JA_size);
-
-    if (matrix->JA == NULL)
-    {
-        printf("ERROR: random sparse matrix memory alocation\n");
-        return ERROR_MEMORY;
-    }
-
-    return ERROR_NONE;
-}
 
 // Function from list.c
 // Added because linked list is a part of matrix structure
@@ -557,7 +565,7 @@ int fill_s_vector(vector_t **vector)
     return ERROR_NONE;
 }
 
-extern print_s_vector(vector_t *vector);
+extern int print_s_vector(vector_t *vector);
 
 // Used to unite everything related to sparse vector creation
 int create_s_vector(vector_t **vector)
@@ -580,11 +588,12 @@ int create_s_vector(vector_t **vector)
         return ERROR_INPUT;
     }
 
+    int nza;
+
     switch(choice)
     {
         case 'y':
             printf("Input amount of non-zero elements in vector: ");
-            int nza;
 
             if (scanf(" %d", &nza) == FALSE || nza > rows)
             {
@@ -595,7 +604,7 @@ int create_s_vector(vector_t **vector)
             if (allocate_sparse_vector(vector, nza) != ERROR_NONE)
                 return ERROR_MEMORY;
 
-            if (fill_s_vector(*vector) != ERROR_NONE)
+            if (fill_s_vector(vector) != ERROR_NONE)
                 return ERROR_INPUT;
             break;
 
@@ -610,16 +619,17 @@ int create_s_vector(vector_t **vector)
             }
 
             // Estimation of non-zero elements amount
-            int nza = rows * density / 100;
+            // (Rounded up)
+            nza = (rows * density + 100 - 1) / 100;
 
             if (allocate_sparse_vector(vector, nza) != ERROR_NONE)
                 return ERROR_MEMORY;
 
-            randomize_vector(*vector);
+            auto_fill_s_vector(vector);
             break;
     }
 
-    print_s_vector(vector);
+    print_s_vector(*vector);
     return ERROR_NONE;
 }
 

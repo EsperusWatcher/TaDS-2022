@@ -70,12 +70,12 @@ int matrix_multiplication_s(matrix_t *matrix, vector_t *vector, vector_t *result
 
     int JA_match = FALSE;
     
-    for (int nza_index = first_nza_index; value_by_index(matrix->IA.root, IA_index) != FALSE;)
+    for (int nza_index = first_nza_index; value_by_index(&matrix->IA, IA_index) != FALSE;)
     {
         IA_index++;
 
-        curr_IA = value_by_index(matrix->IA.root, IA_index);
-        prev_IA = value_by_index(matrix->IA.root, IA_index - 1);
+        curr_IA = value_by_index(&matrix->IA, IA_index);
+        prev_IA = value_by_index(&matrix->IA, IA_index - 1);
         
         row_nza = curr_IA - prev_IA;
         first_nza_index = curr_IA - row_nza;
