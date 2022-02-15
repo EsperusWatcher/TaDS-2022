@@ -626,14 +626,19 @@ int create_s_vector(vector_t **vector)
             // (Rounded up)
             nza = (rows * density + 100 - 1) / 100;
 
-            if (allocate_sparse_vector(vector, nza) != ERROR_NONE)
+            if (allocate_sparse_vector(vector, rows) != ERROR_NONE)
                 return ERROR_MEMORY;
+
+            (*vector)->row = rows;
+            (*vector)->nza = nza;
 
             auto_fill_s_vector(vector);
             break;
     }
 
-    print_s_vector(*vector);
+    if (rows < 100)
+        print_s_vector(*vector);
+
     return ERROR_NONE;
 }
 
@@ -649,7 +654,8 @@ void auto_create_s_vector(vector_t **vector, int size)
 
     (*vector)->row = size;
 
-    print_s_vector(*vector);
+    if (size < 100)
+        print_s_vector(*vector);
 }
 
 void auto_fill_s_vector(vector_t **vector)
@@ -661,6 +667,7 @@ void auto_fill_s_vector(vector_t **vector)
     // Elements won't be organized but we dont need them to be
     // Since this is a vector used in multiplication
     // We only care for values, not their order
+
     for (int i = 0; i < (*vector)->nza; i++)
     {
         fill_JA = rand() % (*vector)->row;
@@ -669,4 +676,20 @@ void auto_fill_s_vector(vector_t **vector)
         (*vector)->A[fill_JA] = fill_A;
         (*vector)->JA[i] = fill_JA;
     }
+}
+
+// Called on result vector after multiplication to
+// Get rid of unneded elements
+void correct_vector(vector_t **vector)
+{
+    int z_counter = 0;
+    for (int i = 0; i < (*vector)->nza; i++)
+    {
+        if ((*vector)->A[i] == 0)
+            z_counter++;
+    }
+
+    (*vector)->nza -= z_counter;
+    (*vector)->A = (int *)realloc((*vector)->A, sizeof(int) * (*vector)->nza);
+    (*vector)->JA = (int *)realloc((*vector)->JA, sizeof(int) * (*vector)->nza);
 }

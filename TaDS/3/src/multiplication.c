@@ -39,7 +39,10 @@ int matrix_multiplication_std(std_matrix_t *matrix1, std_matrix_t *matrix2)
 
     // Result output and freeing memory
     printf("STD MULTIPLICATION RESULT:\n");
-    print_matrix(matrix_res);
+
+    if (matrix_res->col < 500 && matrix_res->row < 500)
+        print_matrix(matrix_res);
+        
     free_std_matrix(&matrix_res);
     return ERROR_NONE;
 }
@@ -107,7 +110,6 @@ int matrix_multiplication_s(matrix_t *matrix, vector_t *vector, vector_t **resul
                 //printf("Adding %d * %d to curr_summ\n", vector->A[vector_index], matrix->A[k]);
                 JA_match = FALSE;
             }
-            printf("\n");
         }
 
         // result vector will have the same amount of rows as vector we use for multiplication
@@ -127,6 +129,7 @@ int matrix_multiplication_s(matrix_t *matrix, vector_t *vector, vector_t **resul
         IA_index++;
     }
 
+    correct_vector(result);
     return ERROR_NONE;
 }
 

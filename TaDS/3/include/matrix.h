@@ -25,5 +25,6 @@ int fill_s_vector(vector_t **vector);
 int create_s_vector(vector_t **vector);
 void auto_fill_s_vector(vector_t **vector);
 void auto_create_s_vector(vector_t **vector, int size);
+void correct_vector(vector_t **vector);
 
 #endif
