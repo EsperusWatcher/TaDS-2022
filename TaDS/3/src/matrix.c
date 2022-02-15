@@ -77,7 +77,6 @@ int create_std_matrix(std_matrix_t **matrix)
         return ERROR_INPUT;
     }
 
-    printf("allocation\n");
     if (allocate_std_matrix(matrix, row, col) != ERROR_NONE)
         return ERROR_MEMORY;
 
@@ -162,6 +161,7 @@ int fill_std_matrix(std_matrix_t *matrix, int amount)
 // According to given density
 void auto_fill_matrix(std_matrix_t *matrix, int density)
 { 
+    srand (time(NULL));
     int chance;
 
     for(int i = 0; i < matrix->row; i++)
@@ -660,6 +660,7 @@ void auto_create_s_vector(vector_t **vector, int size)
 
 void auto_fill_s_vector(vector_t **vector)
 {
+    srand ( time(NULL) );
     //estimation of non-zero elements amount
     int fill_JA;
     int fill_A;

@@ -1,7 +1,10 @@
 #include "../include/efficiency.h" 
+#include "../include/matrix.h"
+#include "../include/list.h"
+
 #include "time.h"
 
-int matrix_multiplication_std(std_matrix_t *matrix1, std_matrix_t *matrix2)
+int matrix_multiplication_std_measure(std_matrix_t *matrix1, std_matrix_t *matrix2)
 {
     size_t matrices_size;
     matrices_size = sizeof(matrix1);
@@ -60,7 +63,7 @@ int matrix_multiplication_std(std_matrix_t *matrix1, std_matrix_t *matrix2)
 
 extern size_t get_list_size(list_t *list);
 
-int matrix_multiplication_s(matrix_t *matrix, vector_t *vector, vector_t **result)
+int matrix_multiplication_s_measure(matrix_t *matrix, vector_t *vector, vector_t **result)
 {
     size_t matrices_size;
     matrices_size = sizeof(matrix);
@@ -152,7 +155,7 @@ int matrix_multiplication_s(matrix_t *matrix, vector_t *vector, vector_t **resul
     printf("For matrices [%d x %d] X [%d x %d]\n", matrix->row, matrix->col, vector->row, 1);
     printf("Time of calculation: %lf\n", time_taken);
     printf("Memory used: %zu\n", matrices_size);
-    
+
     correct_vector(result);
     return ERROR_NONE;
 }
