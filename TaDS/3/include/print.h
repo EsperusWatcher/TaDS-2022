@@ -12,5 +12,6 @@ void print_s_matrix_normal_view(matrix_t *matrix);
 void print_s_matrix(matrix_t *matrix);
 void print_s_vector(vector_t *vector);
 void print_s_vector_std_view(vector_t *vector);
+void print_menu();
 
 #endif

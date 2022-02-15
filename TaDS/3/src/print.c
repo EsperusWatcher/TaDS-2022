@@ -174,3 +174,14 @@ void print_s_vector_std_view(vector_t *vector)
     }
     printf("----------------------\n");
 }
+
+void print_menu()
+{
+    system("cls");
+    printf("Choose an option:\n");
+    printf("1) Sparse matrix x Sparse vector multiplication\n");
+    printf("2) Standart matrix multiplication\n");
+    printf("3) Efficiency comparison\n");
+    printf("4) Exit\n");
+    printf("Choice: ");
+}

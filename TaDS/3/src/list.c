@@ -80,3 +80,20 @@ int add_node(list_t *list, int value)
 
     return ERROR_NONE;
 }
+
+size_t get_list_size(list_t *list)
+{
+    size_t res = 0;
+
+    node_t *point = list->root;
+    node_t *tmp;
+
+    while (point != NULL)
+    {
+        tmp = point;
+        res += sizeof(point);
+        point = point->next;
+    }
+
+    return res;
+}

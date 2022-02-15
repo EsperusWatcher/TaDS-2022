@@ -18,7 +18,7 @@
 #define TRUE 1
 #define FALSE 0
 
-#define DEBUG TRUE
+#define DEBUG FALSE
 
 // Linked list for tracking elements in sparse matrix
 typedef struct node
