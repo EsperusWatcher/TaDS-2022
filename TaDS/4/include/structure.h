@@ -12,5 +12,4 @@
 #define ERROR_CALC 2
 #define ERROR_MEMORY 3
 
-
 #endif
