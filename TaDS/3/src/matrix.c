@@ -56,7 +56,7 @@ int free_std_matrix(std_matrix_t **std_matrix)
 }
 
 // Used to unify all std matrix-related creation functions
-int create_std_matrix(std_matrix_t **matrix)
+int create_std_matrix(std_matrix_t **matrix, int efficiency_flag)
 {
     int row;
     int col;
@@ -70,12 +70,17 @@ int create_std_matrix(std_matrix_t **matrix)
         return ERROR_INPUT;
     }
 
-    printf("Input amount of COLUMNS: ");
-    if (scanf("%d", &col) == FALSE || col < 0)
+    if (efficiency_flag == FALSE)
     {
-        printf("ERROR: wrong matrix input\n");
-        return ERROR_INPUT;
+        printf("Input amount of COLUMNS: ");
+        if (scanf("%d", &col) == FALSE || col < 0)
+        {
+            printf("ERROR: wrong matrix input\n");
+            return ERROR_INPUT;
+        }
     }
+    else
+        col = 1;
 
     if (allocate_std_matrix(matrix, row, col) != ERROR_NONE)
         return ERROR_MEMORY;
@@ -488,7 +493,6 @@ int free_s_matrix(matrix_t **matrix)
 
     free_list(&(*matrix)->IA);
     free(*matrix);
-    printf("s_matrix free OK\n");
 }
 
 // Set all elements in matrix to 0

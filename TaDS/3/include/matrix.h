@@ -3,7 +3,7 @@
 
 #include "structure.h"
 
-int create_std_matrix(std_matrix_t **matrix);
+int create_std_matrix(std_matrix_t **matrix, int efficiency_flag);
 int free_std_matrix(std_matrix_t **std_matrix);
 int allocate_std_matrix(std_matrix_t **std_matrix, int row, int col);
 int fill_std_matrix(std_matrix_t *matrix, int amount);

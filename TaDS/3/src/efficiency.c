@@ -52,7 +52,7 @@ int matrix_multiplication_std_measure(std_matrix_t *matrix1, std_matrix_t *matri
 
     double time_taken = ((double)t) / CLOCKS_PER_SEC;
 
-    printf("Standart multiplication efficiency\n");
+    printf("\nStandart multiplication efficiency\n");
     printf("For matrices [%d x %d] X [%d x %d]\n", matrix1->row, matrix1->col, matrix2->row, 1);
     printf("Time of calculation: %lf\n", time_taken);
     printf("Memory used: %zu\n", matrices_size);
@@ -122,6 +122,7 @@ int matrix_multiplication_s_measure(matrix_t *matrix, vector_t *vector, vector_t
                 {
                     JA_match = TRUE;
                     vector_index = i;
+                    break;
                 }
             }
 
@@ -151,7 +152,7 @@ int matrix_multiplication_s_measure(matrix_t *matrix, vector_t *vector, vector_t
 
     double time_taken = ((double)t) / CLOCKS_PER_SEC;
 
-    printf("Sparse multiplication efficiency\n");
+    printf("\nSparse multiplication efficiency\n");
     printf("For matrices [%d x %d] X [%d x %d]\n", matrix->row, matrix->col, vector->row, 1);
     printf("Time of calculation: %lf\n", time_taken);
     printf("Memory used: %zu\n", matrices_size);

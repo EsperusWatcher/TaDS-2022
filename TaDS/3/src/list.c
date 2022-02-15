@@ -44,8 +44,6 @@ void free_list(list_t *list)
         point = point->next;
         free(tmp);
     }
-
-    printf("list mem OK\n");
 }
 
 int add_node(list_t *list, int value)

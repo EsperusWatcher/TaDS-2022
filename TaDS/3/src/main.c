@@ -94,7 +94,7 @@ int main()
 
                 printf("Creating standart matrices...\n");
 
-                if (create_std_matrix(&matrix1) != ERROR_NONE)
+                if (create_std_matrix(&matrix1, FALSE) != ERROR_NONE)
                     return ERROR_MEMORY;
 
                 if (matrix1->row < MAX_STD_SIZE && matrix1->col < MAX_STD_SIZE)
@@ -102,12 +102,12 @@ int main()
                     print_matrix(matrix1);
                 }
 
-                if (create_std_matrix(&matrix2) != ERROR_NONE)
+                if (create_std_matrix(&matrix2, FALSE) != ERROR_NONE)
                     return ERROR_MEMORY;
 
                 if (matrix2->row < MAX_STD_SIZE && matrix2->col < MAX_STD_SIZE)
                 {
-                    print_matrix(matrix1);
+                    print_matrix(matrix2);
                 }
 
                 if (matrix_multiplication_std(matrix1, matrix2) != ERROR_NONE)
@@ -121,15 +121,19 @@ int main()
                 system("cls");
                 srand ( time(NULL) );
 
-                printf("Creating standart matrices...\n");
-                create_std_matrix(&matrix1);
+                printf("Creating standart matrix...\n");
+
+                if (create_std_matrix(&matrix1, FALSE) != ERROR_NONE)
+                    return ERROR_MEMORY;
 
                 if (matrix1->row < MAX_STD_SIZE && matrix1->col < MAX_STD_SIZE)
                 {
                     print_matrix(matrix1);
                 }
 
-                create_std_matrix(&matrix2);
+                printf("Creating standart vector-column...\n");
+                if (create_std_matrix(&matrix2, TRUE) != ERROR_NONE)
+                    return ERROR_MEMORY;
 
                 if (matrix2->row < MAX_STD_SIZE && matrix2->col < MAX_STD_SIZE)
                 {
@@ -137,7 +141,8 @@ int main()
                 }
 
                 printf("Creating sparse matrix...\n");
-                create_s_matrix(&s_matrix);
+                if (create_s_matrix(&s_matrix) != ERROR_NONE)
+                    return ERROR_MEMORY;
 
                 if (s_matrix->col < 50 && s_matrix->row < 50)
                 {
@@ -146,7 +151,8 @@ int main()
                 }
 
                 printf("Creating sparse vector...\n");
-                create_s_vector(&s_vector);
+                if (create_s_vector(&s_vector) != ERROR_NONE)
+                    return ERROR_MEMORY;
 
                 auto_create_s_vector(&s_vector_res, s_matrix->col);
 

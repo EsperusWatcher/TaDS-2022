@@ -42,7 +42,7 @@ int matrix_multiplication_std(std_matrix_t *matrix1, std_matrix_t *matrix2)
 
     if (matrix_res->col < 500 && matrix_res->row < 500)
         print_matrix(matrix_res);
-        
+
     free_std_matrix(&matrix_res);
     return ERROR_NONE;
 }
@@ -100,6 +100,7 @@ int matrix_multiplication_s(matrix_t *matrix, vector_t *vector, vector_t **resul
                 {
                     JA_match = TRUE;
                     vector_index = i;
+                    break;
                 }
             }
             // There is a non-zero multiplication
@@ -132,18 +133,3 @@ int matrix_multiplication_s(matrix_t *matrix, vector_t *vector, vector_t **resul
     correct_vector(result);
     return ERROR_NONE;
 }
-
-// Function to measure the difference in time/memory
-// Between standart and sparce matrices
-int measure_difference()
-{
-    // Initialize 2 std matrices
-    // Start timer
-    // Multiplication algorithm
-    // End timer
-
-    // Same for sparse matrices
-
-    return ERROR_NONE;
-}
-

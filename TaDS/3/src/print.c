@@ -18,8 +18,6 @@ void print_arr(int *arr, int size)
 // Printnig out default matrix
 void print_matrix(std_matrix_t *matrix)
 {
-    printf("----------------------------------------\n");
-
     printf("Standart matrix output:\n");
     for (int i = 0; i < matrix->row; i++)
     {
@@ -31,7 +29,6 @@ void print_matrix(std_matrix_t *matrix)
         printf("\n");
     }
 
-    printf("----------------------------------------\n");
 }
 
 void print_list_IA(list_t *list)
@@ -124,37 +121,33 @@ void print_s_matrix_normal_view(matrix_t *matrix)
     }
 
     printf("\n");
-    printf("----------------------------------------\n");
 }
 
 // Printning out sparse matrix
 void print_s_matrix(matrix_t *matrix)
 {
-    printf("-------------------------\n");
     printf("Sparse matrix output:\n");
     printf("A: ");
     print_arr(matrix->A, matrix->nza);
     printf("JA: ");
     print_arr(matrix->JA, matrix->nza);
     print_list_IA(&matrix->IA);
-    printf("-------------------------\n");
     
 }
 
 void print_s_vector(vector_t *vector)
 {
-    printf("----------------------\n");
     printf("SPARSE VECTOR\n");
 
     printf("A: ");
     print_arr(vector->A, vector->nza);
     printf("JA: ");
     print_arr(vector->JA, vector->nza);
-    printf("-------------------------\n");
 }
 
 void print_s_vector_std_view(vector_t *vector)
 {
+    /*
     printf("----------------------\n");
     printf("SPARSE VECTOR IN STD VIEW\n");
 
@@ -173,6 +166,7 @@ void print_s_vector_std_view(vector_t *vector)
         printf("%d\n", vector->A[i]);        
     }
     printf("----------------------\n");
+    */
 }
 
 void print_menu()
