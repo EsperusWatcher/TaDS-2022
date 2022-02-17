@@ -50,37 +50,25 @@ int arr_push(int element, ARR_STACK stack)
 }
 
 // Removes value from stack and returns it
-//TODO Fix this
 int arr_pop(ARR_STACK stack)
 {
-    if (stack->stack_ptr == stack->low_end)
-        printf("The stack is empty\n");
-    else
-    {
-        int ret = *stack->stack_ptr;
-        
-        stack->stack_ptr--;
+    int ret = *stack->stack_ptr;
 
-        return ret;
-    }    
+    stack->stack_ptr--;
+
+    return ret;
 }
 
 void arr_print_stack(ARR_STACK stack)
 {
-    if (stack->stack_ptr == stack->low_end)
-    {
-        printf("The stack is empty\n");
-        return;
-    }
-
     int *scroll;
-    scroll = stack->low_end + 1;
+    scroll = stack->stack_ptr;
 
     printf("ARR STACK:\n");
-    while(scroll <= stack->stack_ptr)
+    while(scroll >= stack->low_end + 1)
     {
         printf("%d\n", *scroll);
-        scroll++;
+        scroll--;
     }
 }
 
@@ -94,12 +82,6 @@ int arr_is_empty(ARR_STACK stack)
 
 int arr_top(ARR_STACK stack)
 {
-    if (stack->stack_ptr == stack->low_end)
-    {
-        printf("The stack is empty\n");
-        return 0;
-    }
-
     return *stack->stack_ptr;
 }
 
