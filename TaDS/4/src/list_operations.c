@@ -2,6 +2,8 @@
 #include "../include/list_structure.h"
 #include "../include/list_operations.h"
 
+address_t freed_mem;
+
 int list_init_stack(LIST_STACK *stack)
 {
     *stack = (LIST_STACK)malloc(sizeof(list_stack_t));
@@ -21,6 +23,8 @@ int list_init_stack(LIST_STACK *stack)
     (*stack)->root->next = NULL;
 
     (*stack)->PS = (*stack)->root;
+
+    freed_mem.last_index = 0;
 
     return ERROR_NONE;
 }
@@ -51,6 +55,23 @@ int list_push(LIST_STACK stack, int value)
     return ERROR_NONE;
 }
 
+void save_memory_info(int *mem_address)
+{
+    int save_flag = TRUE;
+    if (freed_mem.last_index < FREE_ADDRESS_STORAGE - 1)
+    {
+        for (int i = 0; i < freed_mem.last_index; i++)
+            if (mem_address == freed_mem.free_addresses[i])
+                save_flag = FALSE;
+        
+        if (save_flag == TRUE)
+        {
+            freed_mem.free_addresses[freed_mem.last_index] = mem_address;
+            freed_mem.last_index++;
+        }
+    }
+}
+
 int list_pop(LIST_STACK stack)
 {
     node_t *tmp1 = stack->root;
@@ -64,13 +85,12 @@ int list_pop(LIST_STACK stack)
 
     int ret = tmp1->value;
 
+    save_memory_info(tmp1->address);
+
     free(tmp1);
 
     stack->curr_size--;
 
-    // Means stack is not empty
-    // Technically should never happen at this point
-    // But you can never be sure
     if (tmp2 != NULL)
     {
         stack->PS = tmp2;
@@ -114,4 +134,10 @@ void list_show_stack(LIST_STACK stack)
         printf("       %d (%p)\n", tmp->value, tmp->address);
         tmp = tmp->next;
     }
+
+    printf("\n");
+    printf("PREVIOUSLY USED MEM: ");
+    for (int i = 0; i < freed_mem.last_index; i++)
+        printf("%p ", freed_mem.free_addresses[i]);
+    printf("\n");
 }

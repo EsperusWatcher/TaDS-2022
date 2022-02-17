@@ -38,7 +38,7 @@ int input_check(char *msg, int *input)
 
 void arr_print_menu()
 {
-    printf("[ ARRAY STACK ]\n");
+    printf("[ ARRAY STACK MENU ]\n");
     printf("1) Push arr stack\n");
     printf("2) Pop arr stack\n");
     printf("3) Show arr stack\n");
@@ -52,7 +52,7 @@ void arr_print_menu()
 
 void list_print_menu()
 {
-    printf("[ LIST STACK ]\n");
+    printf("[ LIST STACK MENU ]\n");
     printf("1) Push list stack\n");
     printf("2) Pop list stack\n");
     printf("3) Show list stack\n");
@@ -60,6 +60,7 @@ void list_print_menu()
     printf("5) Top list stack\n");
     printf("6) Compare arr & list stacks efficiency\n");
     printf("7) Switch to arr stack\n");
+    printf("8) Reverse array of ascanding numbers\n");
     printf("Or anything else to Exit\n");
-    printf("Choose:\n");
+    printf("Choose: ");
 }

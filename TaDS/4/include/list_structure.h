@@ -3,6 +3,8 @@
 
 #define STACK_SIZE 5
 
+#define FREE_ADDRESS_STORAGE 50
+
 typedef struct list_stack *LIST_STACK;
 typedef struct list_node node_t;
 
@@ -14,6 +16,11 @@ struct list_node
     node_t *next;
 };
 
+typedef struct free_addresses
+{
+    int *free_addresses[FREE_ADDRESS_STORAGE];
+    int last_index;
+} address_t;
 
 typedef struct list_stack
 {

@@ -44,7 +44,7 @@ int main()
                 switch (choice)
                 {
                     case 1:
-                        printf("Enter the value: ");
+                        printf("Enter the integer value: ");
                         while (scanf(" %d", &value) == FALSE && isdigit(value) == FALSE)
                         {
                             error_exit = TRUE;
@@ -126,7 +126,7 @@ int main()
                 switch (choice)
                 {
                     case 1:
-                        printf("Enter the value: ");
+                        printf("Enter the integer value: ");
                         while (scanf(" %d", &value) == FALSE && isdigit(value) == FALSE)
                         {
                             error_exit = TRUE;
