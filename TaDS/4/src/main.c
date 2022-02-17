@@ -22,6 +22,10 @@ int main()
     ARR_STACK arr_stack;
     arr_stack = arr_init_stack();
 
+    LIST_STACK l_stack;
+    if (list_init_stack(&l_stack) != ERROR_NONE)
+        display_error(ERROR_MEMORY);
+
     while (TRUE)
     {
         switch (arr_selected)
@@ -40,7 +44,6 @@ int main()
                 switch (choice)
                 {
                     case 1:
-
                         printf("Enter the value: ");
                         while (scanf(" %d", &value) == FALSE && isdigit(value) == FALSE)
                         {
@@ -96,7 +99,8 @@ int main()
                         break;
                     default:
                         system("cls");
-                        free(arr_stack);
+                        arr_free_stack(&arr_stack);
+                        list_free_stack(&l_stack);
                         return ERROR_NONE;
                 }
 
@@ -114,16 +118,14 @@ int main()
                     list_print_menu();
                 }
 
-                if ((scanf(" %d", &choice) == FALSE && isdigit(choice) == FALSE) || error_exit == TRUE)
+                if (error_exit == TRUE || (scanf(" %d", &choice) == FALSE && isdigit(choice) == FALSE))
                 {
                     choice = 10;
                 }
 
-                //TODO Switch everything to list structure
                 switch (choice)
                 {
                     case 1:
-
                         printf("Enter the value: ");
                         while (scanf(" %d", &value) == FALSE && isdigit(value) == FALSE)
                         {
@@ -132,7 +134,7 @@ int main()
                             break;
                         }
                         
-                        if (arr_push(value, arr_stack) == ERROR_OVERFLOW)
+                        if (list_push(l_stack, value) != ERROR_NONE)
                         {
                             error_exit = TRUE;
                             display_error(ERROR_OVERFLOW);
@@ -142,32 +144,32 @@ int main()
                         break;
                     case 2:
                     
-                        if (arr_is_empty(arr_stack) == FALSE)
-                            printf("popped: %d\n", arr_pop(arr_stack));
+                        if (!list_is_stack_empty(l_stack))
+                            printf("popped: %d\n", list_pop(l_stack));
                         else
                             printf("WARNING: Stack is empty\n");
 
                         break;
                     case 3:
 
-                        if (arr_is_empty(arr_stack) == FALSE)
-                            arr_print_stack(arr_stack);
+                        if (!list_is_stack_empty(l_stack))
+                            list_show_stack(l_stack);
                         else
                             printf("WARNING: Stack is empty\n");
 
                         break;
                     case 4:
 
-                        if (arr_is_empty(arr_stack) == FALSE)
-                            arr_empty_stack(arr_stack);
+                        if (!list_is_stack_empty(l_stack))
+                            list_empty_stack(l_stack);
                         else
                             printf("WARNING: Stack is already empty\n");
                     
                         break;
                     case 5:
 
-                        if (arr_is_empty(arr_stack) == FALSE)
-                            printf("top element of the stack is %d\n", arr_top(arr_stack));
+                        if (!list_is_stack_empty(l_stack))
+                            printf("top element of the stack is %d\n", list_top(l_stack));
                         else
                             printf("WARNING: Stack is empty\n");
                     
@@ -180,7 +182,8 @@ int main()
                         break;
                     default:
                         system("cls");
-                        free(arr_stack);
+                        arr_free_stack(&arr_stack);
+                        list_free_stack(&l_stack);
                         return ERROR_NONE;
                 }
 

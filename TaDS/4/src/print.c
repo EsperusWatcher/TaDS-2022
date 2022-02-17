@@ -19,6 +19,7 @@ void display_error(int code)
             printf("ERROR: Overflow error\n");
             break;
         default:
+            printf("ERROR\n");
             break;
     }
 

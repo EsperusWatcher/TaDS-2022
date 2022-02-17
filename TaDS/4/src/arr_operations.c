@@ -31,8 +31,6 @@ ARR_STACK arr_init_stack()
     for (int i = 0; i < STACK_SIZE; i++)
         stack->high_end++;
 
-    stack->size = 0;
-
     return stack;
 }
 
@@ -64,10 +62,10 @@ void arr_print_stack(ARR_STACK stack)
     int *scroll;
     scroll = stack->stack_ptr;
 
-    printf("ARR STACK:\n");
+    printf("[ ARR STACK ]:\n");
     while(scroll >= stack->low_end + 1)
     {
-        printf("%d\n", *scroll);
+        printf("      %d\n", *scroll);
         scroll--;
     }
 }
