@@ -16,14 +16,11 @@
 #define ERROR_EMPTY 5
 
 #define BUFFER_SIZE 256
-#define STACK_SIZE 128
 
 #define TRUE 1
 #define FALSE 0
 
-#define DISPLAY_ERROR_INPUT \
-    system("cls"); \
-    printf("ERROR: Wrong input\n"); \
-    system("pause"); \
+// Just random number
+#define EXIT_CODE 999
 
 #endif

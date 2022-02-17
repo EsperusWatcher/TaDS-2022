@@ -5,11 +5,18 @@
 #include "../include/arr_operations.h"
 #include "../include/print.h"
 
+
 int main()
 {
+    // Switching interface between list/array stack commands
     int arr_selected = TRUE;
+
     int choice;
+
+    // Used in push() functions
     int value;
+
+    // Flag to exit the loop in case of error
     int error_exit = FALSE;
 
     ARR_STACK arr_stack;
@@ -27,10 +34,8 @@ int main()
                     arr_print_menu();  
                 }
 
-                if ((scanf(" %d", &choice) == FALSE && isdigit(choice) == FALSE) || error_exit == TRUE)
-                {
-                    choice = 10;
-                }
+                if (error_exit == TRUE || (scanf(" %d", &choice) == FALSE && isdigit(choice) == FALSE))
+                    choice = EXIT_CODE;
 
                 switch (choice)
                 {
@@ -40,11 +45,15 @@ int main()
                         while (scanf(" %d", &value) == FALSE && isdigit(value) == FALSE)
                         {
                             error_exit = TRUE;
-                            DISPLAY_ERROR_INPUT;
+                            display_error(ERROR_INPUT);
                             break;
                         }
-
-                        arr_push(value, arr_stack);
+                        
+                        if (arr_push(value, arr_stack) != ERROR_NONE)
+                        {
+                            error_exit = TRUE;
+                            display_error(ERROR_OVERFLOW);
+                        }
                     
                         break;
                     case 2:
@@ -119,11 +128,16 @@ int main()
                         while (scanf(" %d", &value) == FALSE && isdigit(value) == FALSE)
                         {
                             error_exit = TRUE;
-                            DISPLAY_ERROR_INPUT;
+                            display_error(ERROR_INPUT);
                             break;
                         }
-
-                        arr_push(value, arr_stack);
+                        
+                        if (arr_push(value, arr_stack) == ERROR_OVERFLOW)
+                        {
+                            error_exit = TRUE;
+                            display_error(ERROR_OVERFLOW);
+                            break;
+                        }
                     
                         break;
                     case 2:
@@ -162,7 +176,7 @@ int main()
                         printf("UNDER CONSTRUCTION\n");
                         break;
                     case 7:
-                        arr_selected = FALSE;
+                        arr_selected = TRUE;
                         break;
                     default:
                         system("cls");

@@ -1,6 +1,6 @@
+#include "../include/structure.h"
 #include "../include/arr_structure.h"
 #include "../include/arr_operations.h"
-#include "../include/structure.h"
 
 ARR_STACK arr_init_stack()
 {
@@ -23,12 +23,12 @@ ARR_STACK arr_init_stack()
     }
 
     // At the start
-    stack->low_end = &stack->stack;
+    stack->low_end = stack->stack;
     stack->stack_ptr = stack->stack;
     // One element "above" stack
-    stack->high_end = &stack->stack;
+    stack->high_end = stack->stack;
 
-    for (int i = 0; i < STACK_SIZE + 1; i++)
+    for (int i = 0; i < STACK_SIZE; i++)
         stack->high_end++;
 
     stack->size = 0;
@@ -39,13 +39,10 @@ ARR_STACK arr_init_stack()
 // Adding new element into the arr stack
 int arr_push(int element, ARR_STACK stack)
 {
-    stack->stack_ptr++;
-
-    if (stack->stack_ptr == *stack->high_end)
-    {
-        printf("ERROR: stack overflow\n");
+    if (stack->stack_ptr == stack->high_end)
         return ERROR_OVERFLOW;
-    }
+
+    stack->stack_ptr++;
 
     *stack->stack_ptr = element;
 
@@ -56,7 +53,7 @@ int arr_push(int element, ARR_STACK stack)
 //TODO Fix this
 int arr_pop(ARR_STACK stack)
 {
-    if (stack->stack_ptr == *stack->low_end)
+    if (stack->stack_ptr == stack->low_end)
         printf("The stack is empty\n");
     else
     {
@@ -70,14 +67,14 @@ int arr_pop(ARR_STACK stack)
 
 void arr_print_stack(ARR_STACK stack)
 {
-    if (stack->stack_ptr == *stack->low_end)
+    if (stack->stack_ptr == stack->low_end)
     {
         printf("The stack is empty\n");
         return;
     }
 
     int *scroll;
-    scroll = ++*stack->low_end;
+    scroll = stack->low_end + 1;
 
     printf("ARR STACK:\n");
     while(scroll <= stack->stack_ptr)
@@ -89,7 +86,7 @@ void arr_print_stack(ARR_STACK stack)
 
 int arr_is_empty(ARR_STACK stack)
 {
-    if (stack->stack_ptr == *stack->low_end)
+    if (stack->stack_ptr == stack->low_end)
         return TRUE;
     
     return FALSE;
@@ -97,7 +94,7 @@ int arr_is_empty(ARR_STACK stack)
 
 int arr_top(ARR_STACK stack)
 {
-    if (stack->stack_ptr == *stack->low_end)
+    if (stack->stack_ptr == stack->low_end)
     {
         printf("The stack is empty\n");
         return 0;
@@ -108,7 +105,7 @@ int arr_top(ARR_STACK stack)
 
 void arr_empty_stack(ARR_STACK stack)
 {
-    while (stack->stack_ptr != *stack->low_end)
+    while (stack->stack_ptr != stack->low_end)
         arr_pop(stack);
     printf("The stack emptied successfully\n");
 }
