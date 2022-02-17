@@ -2,7 +2,7 @@
 #include "../include/arr_structure.h"
 #include "../include/arr_operations.h"
 
-ARR_STACK arr_init_stack()
+ARR_STACK arr_init_stack(int stack_size)
 {
     ARR_STACK stack;
 
@@ -14,7 +14,7 @@ ARR_STACK arr_init_stack()
         return NULL;
     }
 
-    stack->stack = (int *)malloc(sizeof(int) * STACK_SIZE);
+    stack->stack = (int *)malloc(sizeof(int) * stack_size);
 
     if (stack->stack == NULL)
     {
@@ -28,7 +28,7 @@ ARR_STACK arr_init_stack()
     // One element "above" stack
     stack->high_end = stack->stack;
 
-    for (int i = 0; i < STACK_SIZE; i++)
+    for (int i = 0; i < stack_size; i++)
         stack->high_end++;
 
     return stack;
@@ -45,6 +45,14 @@ int arr_push(int element, ARR_STACK stack)
     *stack->stack_ptr = element;
 
     return ERROR_NONE;
+}
+
+void arr_fill_stack(ARR_STACK stack)
+{
+    while(stack->stack_ptr != stack->high_end)
+    {
+        arr_push(rand() % 10, stack);
+    }
 }
 
 // Removes value from stack and returns it
@@ -87,7 +95,6 @@ void arr_empty_stack(ARR_STACK stack)
 {
     while (stack->stack_ptr != stack->low_end)
         arr_pop(stack);
-    printf("The stack emptied successfully\n");
 }
 
 void arr_free_stack(ARR_STACK *stack)

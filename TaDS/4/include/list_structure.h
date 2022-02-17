@@ -1,7 +1,7 @@
 #ifndef __LIST_STR__
 #define __LIST_STR__
 
-#define STACK_SIZE 5
+#define L_STACK_SIZE 5
 
 #define FREE_ADDRESS_STORAGE 50
 
@@ -24,6 +24,7 @@ typedef struct free_addresses
 
 typedef struct list_stack
 {
+    int max_size;
     int curr_size;
     node_t *PS;
     node_t *root;

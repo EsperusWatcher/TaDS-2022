@@ -4,7 +4,7 @@
 #include "../include/list_operations.h"
 #include "../include/arr_operations.h"
 #include "../include/print.h"
-
+#include "../include/efficiency.h"
 
 int main()
 {
@@ -20,10 +20,10 @@ int main()
     int error_exit = FALSE;
 
     ARR_STACK arr_stack;
-    arr_stack = arr_init_stack();
+    arr_stack = arr_init_stack(STACK_SIZE);
 
     LIST_STACK l_stack;
-    if (list_init_stack(&l_stack) != ERROR_NONE)
+    if (list_init_stack(&l_stack, L_STACK_SIZE) != ERROR_NONE)
         display_error(ERROR_MEMORY);
 
     while (TRUE)
@@ -78,7 +78,10 @@ int main()
                     case 4:
 
                         if (arr_is_empty(arr_stack) == FALSE)
+                        {
                             arr_empty_stack(arr_stack);
+                            printf("Stack emptied successfully\n");
+                        }
                         else
                             printf("WARNING: Stack is already empty\n");
                     
@@ -92,7 +95,8 @@ int main()
                     
                         break;
                     case 6:
-                        printf("UNDER CONSTRUCTION\n");
+                        //arr_fill_stack(arr_stack);
+                        compare_stacks();
                         break;
                     case 7:
                         arr_selected = FALSE;
@@ -161,7 +165,10 @@ int main()
                     case 4:
 
                         if (!list_is_stack_empty(l_stack))
+                        {
                             list_empty_stack(l_stack);
+                            printf("Stack emptied successfully\n");
+                        }
                         else
                             printf("WARNING: Stack is already empty\n");
                     
@@ -175,7 +182,8 @@ int main()
                     
                         break;
                     case 6:
-                        printf("UNDER CONSTRUCTION\n");
+                        //list_fill_stack(l_stack);
+                        compare_stacks();
                         break;
                     case 7:
                         arr_selected = TRUE;

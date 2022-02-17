@@ -2,6 +2,7 @@
 #define __STRUCTURE__
 
 #include <stdio.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>

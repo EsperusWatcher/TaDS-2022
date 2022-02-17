@@ -60,7 +60,7 @@ void list_print_menu()
     printf("5) Top list stack\n");
     printf("6) Compare arr & list stacks efficiency\n");
     printf("7) Switch to arr stack\n");
-    printf("8) Reverse array of ascanding numbers\n");
+    printf("8) Reverse array of ascending numbers\n");
     printf("Or anything else to Exit\n");
     printf("Choose: ");
 }

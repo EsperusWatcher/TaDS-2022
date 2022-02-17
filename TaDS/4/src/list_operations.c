@@ -4,7 +4,7 @@
 
 address_t freed_mem;
 
-int list_init_stack(LIST_STACK *stack)
+int list_init_stack(LIST_STACK *stack, int stack_size)
 {
     *stack = (LIST_STACK)malloc(sizeof(list_stack_t));
 
@@ -24,14 +24,31 @@ int list_init_stack(LIST_STACK *stack)
 
     (*stack)->PS = (*stack)->root;
 
+    (*stack)->max_size = stack_size;
+
     freed_mem.last_index = 0;
 
     return ERROR_NONE;
 }
 
+void list_stack_size(LIST_STACK stack, size_t *size)
+{
+    size_t result = 0;
+
+    node_t *tmp = stack->root->next;
+
+    while(tmp != NULL)
+    {
+        result += (sizeof(node_t) - sizeof(int *));
+        tmp = tmp->next;
+    }
+
+    *size += result;
+}
+
 int list_push(LIST_STACK stack, int value)
 {
-    if (stack->curr_size == STACK_SIZE)
+    if (stack->curr_size == stack->max_size)
         return ERROR_OVERFLOW;
 
     node_t *tmp = stack->root;
@@ -104,8 +121,6 @@ void list_empty_stack(LIST_STACK stack)
 {
     while (stack->curr_size > 0)
         list_pop(stack);
-
-    printf("Stack emptied successfully\n");
 }
 
 int list_is_stack_empty(LIST_STACK stack)
@@ -115,6 +130,7 @@ int list_is_stack_empty(LIST_STACK stack)
 
 void list_free_stack(LIST_STACK *stack)
 {
+    list_empty_stack(*stack);
     free((*stack)->root);
     free(*stack);
 }
@@ -122,6 +138,15 @@ void list_free_stack(LIST_STACK *stack)
 int list_top(LIST_STACK stack)
 {
     return stack->PS->value;
+}
+
+// Fills stack to full with random values
+void list_fill_stack(LIST_STACK stack)
+{
+    while(stack->curr_size < stack->max_size)
+    {
+        list_push(stack, rand() % 10);
+    }
 }
 
 void list_show_stack(LIST_STACK stack)
