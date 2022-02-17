@@ -12,7 +12,7 @@ void matrix_tests()
         printf("TESTING STD MATRIX CREATION\n");
         
         std_matrix_t *test_matrix;
-        create_std_matrix(&test_matrix);
+        create_std_matrix(&test_matrix, FALSE);
 
         if (test_matrix->col < 100 && test_matrix->row < 100)
         {
@@ -21,7 +21,7 @@ void matrix_tests()
         }
 
         std_matrix_t *test_matrix2;
-        create_std_matrix(&test_matrix2);
+        create_std_matrix(&test_matrix2, FALSE);
         
         if (test_matrix2->col < 100 && test_matrix2->row < 100)
         {

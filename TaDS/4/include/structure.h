@@ -21,4 +21,9 @@
 #define TRUE 1
 #define FALSE 0
 
+#define DISPLAY_ERROR_INPUT \
+    system("cls"); \
+    printf("ERROR: Wrong input\n"); \
+    system("pause"); \
+
 #endif

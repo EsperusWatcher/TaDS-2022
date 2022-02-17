@@ -3,6 +3,16 @@
 #include "../include/list_structure.h"
 #include "../include/print.h"
 
+int input_check(char *msg, int *input)
+{
+    printf("%s ", msg);
+    
+    if (scanf(" %d", &*input) != FALSE && isdigit(*input))
+        return TRUE;
+    
+    return FALSE;
+}
+
 void arr_print_menu()
 {
     printf("Choose:\n");
