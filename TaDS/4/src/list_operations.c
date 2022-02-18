@@ -104,7 +104,8 @@ int list_pop(LIST_STACK stack)
 
     save_memory_info(tmp1->address);
 
-    free(tmp1);
+    if (tmp1 != stack->root)
+        free(tmp1);
 
     stack->curr_size--;
 
@@ -130,7 +131,9 @@ int list_is_stack_empty(LIST_STACK stack)
 
 void list_free_stack(LIST_STACK *stack)
 {
-    list_empty_stack(*stack);
+    if (!list_is_stack_empty(*stack))
+        list_empty_stack(*stack);
+
     free((*stack)->root);
     free(*stack);
 }
@@ -165,4 +168,40 @@ void list_show_stack(LIST_STACK stack)
     for (int i = 0; i < freed_mem.last_index; i++)
         printf("%p ", freed_mem.free_addresses[i]);
     printf("\n");
+}
+
+void list_reverse_asc_arr()
+{
+    int amount;
+
+    printf("Amount of elements in descending array: ");
+    if (scanf(" %d", &amount) == FALSE && isdigit(amount) == FALSE)
+    {
+        printf("ERROR: wrong input");
+        return;
+    }
+
+    LIST_STACK tmp;
+    list_init_stack(&tmp, amount);
+
+    printf("Input elements(integer) one by one: \n");
+
+    int inp;
+    for (int i = 0; i < amount; i++)
+    {
+        if (scanf(" %d", &inp) == FALSE && isdigit(inp) == FALSE)
+        {
+            printf("ERROR: Wrong input\n");
+            list_free_stack(&tmp);
+            return;
+        }
+
+        list_push(tmp, inp);
+    }
+
+    printf("Reversed: \n");
+    for(int i = 0; i < amount; i++)
+        printf("%d\n", list_pop(tmp));
+
+    list_free_stack(&tmp);
 }

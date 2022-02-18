@@ -95,7 +95,6 @@ int main()
                     
                         break;
                     case 6:
-                        //arr_fill_stack(arr_stack);
                         compare_stacks();
                         break;
                     case 7:
@@ -181,12 +180,18 @@ int main()
                             printf("WARNING: Stack is empty\n");
                     
                         break;
+
                     case 6:
-                        //list_fill_stack(l_stack);
                         compare_stacks();
                         break;
+
                     case 7:
                         arr_selected = TRUE;
+                        break;
+
+                    case 8:
+                        system("cls");
+                        list_reverse_asc_arr();
                         break;
                     default:
                         system("cls");

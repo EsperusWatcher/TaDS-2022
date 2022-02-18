@@ -38,7 +38,7 @@ void measure_efficiency(ARR_STACK arr_stack, LIST_STACK l_stack)
     printf("[                          ]\n");
     printf("[ ------ LIST - TESTS -----]\n");
     printf("[ -------------------------]\n");
-    
+
     start_time = clock();
 
     list_fill_stack(l_stack);
@@ -85,11 +85,17 @@ void compare_stacks()
     measure_efficiency(arr_stack_500, l_stack_500);
     measure_efficiency(arr_stack_10000, l_stack_10000);
 
+    printf("OK list\n");
     list_free_stack(&l_stack_50);
+    printf("OK list\n");
+
     list_free_stack(&l_stack_500);
+    printf("OK list\n");
     list_free_stack(&l_stack_10000);
+    printf("OK list\n");
 
     arr_free_stack(&arr_stack_50);
     arr_free_stack(&arr_stack_500);
     arr_free_stack(&arr_stack_10000);
+    printf("OK arr\n");
 }

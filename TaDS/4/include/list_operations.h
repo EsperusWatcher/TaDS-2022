@@ -13,5 +13,6 @@ int list_top(LIST_STACK stack);
 void list_show_stack(LIST_STACK stack);
 void list_fill_stack(LIST_STACK stack);
 void list_stack_size(LIST_STACK stack, size_t *size);
+void list_reverse_asc_arr();
 
 #endif
