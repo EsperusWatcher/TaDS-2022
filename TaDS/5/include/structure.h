@@ -14,6 +14,14 @@
 #define ERROR_INPT 2
 #define ERROR_OVFL 3
 
+#define TRUE 1
+#define FALSE 0
+
+#define CLS_PAUSE system("pause");
+#define CLS_CLEAR system("cls");
+
+#define EXIT_CODE 999
+
 typedef struct serving_request request_t;
 typedef struct serving_parameters param_t;
 
@@ -27,18 +35,20 @@ struct serving_request
 {
     double service_time_1;
     double service_time_2;
-    float proceed_chance;
 };
 
 struct serving_parameters
 {
     // Borders for service time of First Machine
-    float T1_low;
-    float T1_high;
+    int T1_low;
+    int T1_high;
 
     // Borders for service time of Second Machine
-    float T2_low;
-    float T2_high;
+    int T2_low;
+    int T2_high;
+
+    // Chance of request going through First Machine into Second Machine
+    float proceed_chance;
 };
 
 #endif

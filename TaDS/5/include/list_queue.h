@@ -3,11 +3,13 @@
 
 #include "structure.h"
 
-typedef struct list_node
+typedef struct list_node node_t;
+
+struct list_node
 {
     request_t Request;
     node_t *next;
-} node_t;
+};
 
 
 typedef struct list_queue
