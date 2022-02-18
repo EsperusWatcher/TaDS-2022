@@ -30,6 +30,7 @@ void print_menu()
     printf("2) Array queue simulation\n");
     printf("3) List queue simulation\n");
     printf("4) Efficiency comparison\n");
+    printf("5) Queue testing mode\n");
     printf("X) Anything else - Exit\n");
     printf("Choice: ");
 }

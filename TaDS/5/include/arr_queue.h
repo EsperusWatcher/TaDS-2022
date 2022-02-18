@@ -3,13 +3,19 @@
 
 #include "structure.h"
 
-struct arr_queue
+#define SIZE_ARR_QUE 100
+
+typedef struct arr_queue
 {
-    request_t *Pin;
-    request_t *Pout;
+    // Current queue size
+    int queue_size;
 
-    request_t *Queue;
-};
+    request_t *p_in;
+    request_t *p_out;
 
+    request_t *queue;
+} arr_que_t;
+
+typedef arr_que_t* ARR_QUEUE;
 
 #endif

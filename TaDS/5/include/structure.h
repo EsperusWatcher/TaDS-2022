@@ -22,6 +22,9 @@
 
 #define EXIT_CODE 999
 
+// Max amount of currently in-system requests
+#define MAX_REQUEST 100
+
 typedef struct serving_request request_t;
 typedef struct serving_parameters param_t;
 
@@ -33,6 +36,7 @@ typedef struct serving_parameters param_t;
 // Process repeats 
 struct serving_request
 {
+    int index; // Used only in queue testing
     double service_time_1;
     double service_time_2;
 };

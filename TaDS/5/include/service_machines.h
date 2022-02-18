@@ -13,4 +13,6 @@
 // Functions
 int change_service_params(param_t *serv_params);
 void set_service_params(param_t *serv_params);
+request_t generate_request(param_t serv_params);
+
 #endif

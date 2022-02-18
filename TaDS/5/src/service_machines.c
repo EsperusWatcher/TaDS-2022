@@ -1,6 +1,16 @@
 #include "../include/service_machines.h"
 #include "../include/print.h"
 
+request_t generate_request(param_t serv_params)
+{
+    request_t req;
+
+    req.service_time_1 = (double)serv_params.T1_low + (double)rand()/(double)(RAND_MAX/serv_params.T1_high);
+    req.service_time_2 = (double)serv_params.T2_low + (double)rand()/(double)(RAND_MAX/serv_params.T2_high);
+
+    return req;
+}
+
 void set_service_params(param_t *serv_params)
 {
     serv_params->T1_low = STD_T1_LOW;
