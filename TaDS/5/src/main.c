@@ -4,6 +4,8 @@
 
 int main()
 {
+    srand(time(NULL));
+
     int choice;
     int error_exit = FALSE;
 

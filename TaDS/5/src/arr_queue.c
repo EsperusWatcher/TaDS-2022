@@ -1,4 +1,5 @@
 #include "../include/arr_operations.h"
+#include "../include/arr_queue.h"
 
 int arr_init_que(ARR_QUEUE *queue)
 {
@@ -36,9 +37,11 @@ int arr_free_que(ARR_QUEUE *queue)
 // FALSE - not full
 int arr_queue_is_full(ARR_QUEUE queue)
 {
-    if (queue->p_in == queue->p_out && queue->queue_size > 0)
+    if (queue->queue_size == SIZE_ARR_QUE)
         return TRUE;
 
+
+    printf("not full\n");
     return FALSE;
 }
 
@@ -52,7 +55,11 @@ int arr_push_que(ARR_QUEUE queue, param_t serv_params)
 {
     // Check if Queue is full
     if (arr_queue_is_full(queue))
+    {
+        printf("Overflow\n");
+        CLS_PAUSE;
         return ERROR_OVFL;
+    }
 
     // Here we generate random values for Request element
     // T1 & T2, then add it into the que
@@ -67,9 +74,11 @@ int arr_push_que(ARR_QUEUE queue, param_t serv_params)
 
     // Check if Queue has moved over its bounds
     // If it did, move Pin to the beginning of queue
-    if (queue->p_in == (queue->queue + sizeof(request_t) * SIZE_ARR_QUE))
+    if (queue->p_in == (queue->queue + sizeof(request_t) * (SIZE_ARR_QUE - 1)))
+    {
         queue->p_in = queue->queue;
-
+        printf("moved\n");
+    }
     return ERROR_NONE;
 }
 
@@ -83,7 +92,7 @@ request_t arr_pop_que(ARR_QUEUE queue)
 
     // If pointer goes above queueu border
     // Reassign it to the beginning of queue
-    if (queue->p_out == (queue->queue + sizeof(request_t) * SIZE_ARR_QUE))
+    if (queue->p_out == (queue->queue + sizeof(request_t) * (SIZE_ARR_QUE - 1)))
         queue->p_out = queue->queue;
 
     return ret;

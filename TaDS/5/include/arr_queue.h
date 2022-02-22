@@ -3,7 +3,7 @@
 
 #include "structure.h"
 
-#define SIZE_ARR_QUE 100
+#define SIZE_ARR_QUE 2
 
 typedef struct arr_queue
 {
