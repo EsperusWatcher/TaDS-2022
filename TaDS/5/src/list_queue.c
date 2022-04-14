@@ -1,4 +1,4 @@
-#include "../include/list_operations.h"
+#include "../include/list_queue.h"
 
 int list_init_que(LIST_QUEUE *queue)
 {

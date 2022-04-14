@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <conio.h>
 #include <math.h>
 #include <ctype.h>
 #include <string.h>
@@ -17,8 +16,15 @@
 #define TRUE 1
 #define FALSE 0
 
+#define SYSTEM LINUX
+
+#if SYSTEM == LINUX
+#define CLS_PAUSE getchar();getchar();
+#define CLS_CLEAR system("clear");
+#elif SYSTEM == WINDOWS
 #define CLS_PAUSE system("pause");
 #define CLS_CLEAR system("cls");
+#endif
 
 #define EXIT_CODE 999
 
